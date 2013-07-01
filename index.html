@@ -11,6 +11,14 @@
 		set slide ID to get needed elements
 		-->
 	<style>
+    #Cover iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+    }
 		#Cover h2 {
 			margin:100px 0 0;
 			color:#FFF;
@@ -92,7 +100,7 @@
 		<h2>Motivation: Sharing stuff</h2>
 		<figure class="next">
 			<blockquote>
-				<p>Hey Mark, can I get access to your current crop of malware samples?</p>
+				<p>Hey Mark, can I have real-time access to the malware hitting your sensors?</p>
 			</blockquote>
 			<figcaption>Jojo</figcaption>
 		</figure>
@@ -106,67 +114,134 @@
 	</div></section>
 
 	<section class="slide"><div>
-		<h2>All kinds of options to share data</h2>
+		<h2>Available options for sharing data</h2>
     <h3>The usual suspects...</h3>
 		<ul class="next">
-      <li>Batch: FTP, E-Mail, One-click hoster</li>
+      <li>Batch: FTP, E-Mail, One-click hoster ...</li>
       <li>Real-time: XMPP</li>
     </ul>
     <h3 class="next">... with their common problems.</h3>
     <ul class="next">
-      <li>Channels?</li>
+      <li>Naming and formatting of data. Channels?</li>
       <li>Authentication? Access Control?</li>
-      <li>Overhead?</li>
+      <li>Protocol and management overhead?</li>
     </ul>
 	</div></section>
 
 	<section class="slide"><div>
-		<h2>Serious Citations</h2>
-		<figure>
-			<blockquote>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.</p>
-			</blockquote>
-			<figcaption>Marcus Tullius Cicero</figcaption>
-		</figure>
+		<h2>The hpfeeds protocol</h2>
+    <p><i>hpfeeds</i> is an authenticated datafeed protocol (by Mark) used by the <a
+    href="http://honeynet.org/">HoneyNet project</a>. It supports channels and authkeys.</p>
+    <ul class="next">
+      <li>Channel permissions on central webif connected to the broker</li>
+      <li>Implementations for hpfeeds exist for Python, Go, Ruby and JavaScript</li>
+    </ul>
+   	<p class="next" style="text-align: center"><b>Only problem</b>: Management overhead for channel access control.</p>
 	</div></section>
+
 	<section class="slide"><div>
-		<h2>Code Samples</h2>
-		<pre>
-			<code>&lt;!DOCTYPE html&gt;</code>
-			<code>&lt;html lang="en"&gt;</code>
-			<code><mark>&lt;head&gt;</mark> <mark class="comment">&lt;!--Comment--&gt;</mark></code>
-			<code>    &lt;title&gt;Shower&lt;/title&gt;</code>
-			<code>    &lt;meta charset="<mark class="important">UTF-8</mark>"&gt;</code>
-			<code>    &lt;link rel="stylesheet" href="screen.css"&gt;</code>
-			<code><mark>&lt;/head&gt;</mark></code>
-		</pre>
+		<h2>So what would we need?</h2>
+      <p>A system for large-scale real-time data-sharing would have to ...
+      <ol>
+        <li>be real-time</li>
+        <li>follow simple pub/sub principles</li>
+        <li>allow for distributed and natural access control</li>
+      </li>
 	</div></section>
-	<section class="slide cover" id="Picture"><div>
-		<h2>Pictures</h2>
-		<img src="pictures/picture.jpg" alt="">
-		<!-- photo by John Carey, fiftyfootshadows.net -->
-	</div></section>
-	<section class="slide shout"><div>
-		<h2>You can even shout this way</h2>
-	</div></section>
+
 	<section class="slide"><div>
-		<h2>Inner Navigation</h2>
-		<ol>
-			<li>Lets you reveal list items one by one</li>
-			<li class="next">To keep some key points</li>
-			<li class="next">In secret from audience</li>
-			<li class="next">But it will work only once</li>
-			<li class="next">Nobody wants to see the same joke twice</li>
-		</ol>
+		<h2>Distributed Access Control</h2>
+    <p>Managing permission for a large number of users does not scale and also
+    does not correspond to the way we collaborate. Think "Web of Trust" and
+    "Distributed Version Control" (like with git).</p>
+    <p class="next" style="text-align: center; font-size: 200%;">Social is the solution!</p>
 	</div></section>
-	<section class="slide shout" id="SeeMore"><div>
-		<h2><img src="pictures/logo.svg" alt=""> <a href="https://github.com/shower/shower/">See more on GitHub</a></h2>
+
+	<section class="slide"><div>
+		<h2>Use case: Manuscript</h2>
+    <p>TODO: Mark!
 	</div></section>
-	<p class="badge"><a href="https://github.com/shower/shower">Fork me on Github</a></p>
-	<!--
-		To hide progress bar from entire presentation
-		just remove “progress” element.
-		-->
+
+	<section class="slide"><div>
+		<h2>hpfriends</h2>
+    <p><i>hpfriends</i> is an evolution of the hpfeeds system. The wire-format
+    is identical, the message broker behaves the same way. The big difference
+    is the data-sharing model and the backend software.</p>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - unique features</h2>
+    <p style="line-height: 1.3;"><i>hpfriends</i> supports users and groups. These are connected by
+    sharing relations, representing a web of trust between users who trust each
+    other by sharing their own data as well as data received by third parties.</p>
+    <img src="gfx/sharing.png" style="margin-left: auto; margin-right: auto; height: 50%">
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - demo time!</h2>
+    <p style="line-height: 1.3;">Two scenarios: Direct sharing and sharing via third parties.</p>
+    <iframe src="http://map.honeycloud.net" style="width: 100%; height: 68%; margin-top: -30px;" scrolling="no"></iframe>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - social graph</h2>
+    <img src="gfx/jojo_graph.png" style="float: right; display: inline; height: 50%">
+    <p style="line-height: 1.3;"><i>hpfriends</i> operates on a social graph. Users and groups are represented by nodes in this graph, while sharing relations and group membership is denoted by edges between nodes. The channels being shared are specified as edge attributes.</p>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - implementation</h2>
+    <p style="line-height: 1.3;">Currently, <i>hpfriends</i> uses the Neo4j graph database to store user, group and sharing information. Further information on users / etc is stored within MongoDB.</p>
+    <img src="gfx/graph_stats.png" style="margin-left: auto; margin-right: auto; margin-bottom: 50px; display: block; width: 100%">
+
+    <p style="line-height: 1.3;">For actual message delivery via the feedbroker, sharing relationships are cached for 5-minute intervals for performance.</p>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - frontend</h2>
+    <p style="line-height: 1.3;">Public hpfriends webif is at <a
+    href="http://hpfriends.honeycloud.net">hpfriends.honeycloud.net</a>. The webif was built using Meteor, a real-time
+    JavaScript / NodeJS web-framework which takes care of data persistence &amp; synchronization, data binding to the
+    UI, templating, latency compensation and many other things.</p>
+    <ul>
+      <li>CoffeeScript with Handlebars templating</li>
+      <li>MongoDB and Neo4j queries in the background</li>
+      <li>Web 2.0 stuff: Twitter Bootstrap, Webfonts, Websockets, etc.</li>
+    </ul>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - hpfeeds wire format</h2>
+    <pre><code>struct MsgHeader {
+  uint32_t <mark>messageLength</mark>; <mark class="comment">// total length</mark>
+  uint8_t <mark>opCode</mark>; <mark class="comment">// currently five opCodes implemented</mark>
+};</code></pre>
+  <p>Full documentation and list of opCodes at <a href="https://github.com/rep/hpfeeds">github/rep/hpfeeds</a>.</p>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - Software support</h2>
+      <ul>
+        <li><b>dionaea</b> (server honeypot): branch which has hpfeeds integration</li>
+      </ul>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - links</h2>
+    <ul>
+      <li><b>hpfriends</b> at <a href="http://hpfriends.honeycloud.net">hpfriends.honeycloud.net</a></li>
+      <li>Guide on how to use hpfriends at <a href="http://heipei.github.io/">heipei.github.io</a></li>
+      <li><b>hpfeeds</b> repo and documentation at <a href="https://github.com/rep/hpfeeds">github.com/rep/hpfeeds</a></li>
+      <li>The <b>HoneyMap</b> at <a href="http://map.honeynet.org/">map.honeynet.org</a></li>
+    </ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>The end</h2>
+    <p style="text-align: center; font-size: 200%;">Thank you for listening!</p>
+    <p style="text-align: center;">Follow-up questions to <a href="mailto:ms@mwcollect.org">Mark</a> or <a href="mailto:heipei@hackvalue.de">Jojo</a>.</p>
+	</div></section>
+
 	<div class="progress"><div></div></div>
 	<script src="shower/shower.min.js"></script>
 	<!-- Copyright © 2013 Yours Truly, Famous Inc. -->
