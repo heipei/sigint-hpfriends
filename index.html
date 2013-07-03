@@ -6,11 +6,12 @@
 	<meta name="viewport" content="width=792, user-scalable=no">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<link rel="stylesheet" href="shower/themes/ribbon/styles/screen.css">
-	<!--
-		To apply styles to the certain slides
-		set slide ID to get needed elements
-		-->
+
 	<style>
+    body {
+      /* prevent "flickering" between aliased/antialiased display */
+      -webkit-backface-visibility: hidden;
+    }
     #Cover iframe {
       position: absolute;
       top: 0;
@@ -52,8 +53,21 @@
       font-weight: normal;
       color: #666;
     }
+    li {
+      margin-bottom: -10px;
+    }
+    p {
+      margin-bottom: 0px;
+    }
+    ul.bare li:before {
+      content: none;
+    }
+    ul.bare li {
+      margin-left: 50px;
+    }
 	</style>
 </head>
+
 <body class="list">
 	<header class="caption">
 		<h1>hpfriends - real-time social data-sharing</h1>
@@ -101,25 +115,37 @@
 		<h2>Motivation: Sharing stuff</h2>
 		<figure class="next">
 			<blockquote>
-				<p>Hey Mark, can I have real-time access to the malware hitting your sensors?</p>
+				<p>Hey Mark, can I have (real-time) access to the malware hitting your sensors?</p>
 			</blockquote>
 			<figcaption>Jojo</figcaption>
 		</figure>
 
 		<figure class="next">
 			<blockquote>
-				<p>Hey Jojo, can you forward the samples you got from Mark to me as well?</p>
+				<p>Hey Jojo, can you give me access to the samples you get from Mark?</p>
 			</blockquote>
 			<figcaption>Other people</figcaption>
 		</figure>
+
+		<figure class="next">
+			<blockquote>
+				<p>Sure, let me just ask the admin to give you access to the channel...</p>
+			</blockquote>
+			<figcaption>Jojo (probably not the last time)</figcaption>
+		</figure>
 	</div></section>
+
+	<section class="slide"><div>
+		<h2>Motivation: The HoneyMap</h2>
+    <iframe src="http://map.honeycloud.net" style="width: 100%; height: 78%; margin-top: -30px;" scrolling="no"></iframe>
+  </div></section>
 
 	<section class="slide"><div>
 		<h2>Available options for sharing data</h2>
     <h3>The usual suspects...</h3>
 		<ul class="next">
-      <li>Batch: FTP, E-Mail, One-click hoster ...</li>
-      <li>Real-time: XMPP</li>
+      <li>Batch: FTP, E-Mail, scp, One-click hoster ...</li>
+      <li>Real-time: XMPP, HTTP submission</li>
     </ul>
     <h3 class="next">... with their common problems.</h3>
     <ul class="next">
@@ -131,20 +157,50 @@
 
 	<section class="slide"><div>
 		<h2>The hpfeeds protocol</h2>
-    <p><i>hpfeeds</i> is an authenticated datafeed protocol (by Mark) used by the <a
+    <p><i>hpfeeds</i> is an authenticated publish/subscribe datafeed protocol (by Mark) used by the <a
     href="http://honeynet.org/">HoneyNet project</a>. It supports channels and authkeys.</p>
     <ul class="next">
       <li>Channel permissions on central webif connected to the broker</li>
+      <li>Access Control via Authkeys, rather than users</li>
+      <li>Simple wire-format, easy to implement and use</li>
       <li>Implementations for hpfeeds exist for Python, Go, Ruby and JavaScript</li>
     </ul>
+    <!--
    	<p class="next" style="text-align: center"><b>Only problem</b>: Management overhead for channel access control.</p>
+    -->
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>hpfeeds - details</h2>
+    <ul class="next">
+      <li>Five protocol message types: <tt>PUB, SUB, ERROR, INFO, AUTH</tt></li>
+      <li>Central feedbroker on server, reference client utility</li>
+      <li>Submission modules for Dionaea, Glastopf and Kippo</li>
+      <li>Statistics sink</li>
+      <li>Webinterface for managing ACLs</li>
+    </ul>
+	</div></section>
+
+	<section class="slide"><div>
+		<h2>hpfeeds - pros &amp; cons</h2>
+    <h3>Pros</h3>
+    <ul class="next bare">
+      <li><b style="color: green">+</b> Easy data sharing, more people using it inside HoneyNet project</li>
+      <li><b style="color: green">+</b> Software support improving steadily</li>
+      <li><b style="color: green">+</b> Even third parties are interested</li>
+    </ul>
+    <h3 class="next">Cons</h3>
+    <ul class="next bare">
+      <li><b style="color: red">-</b> Channels are global (one "dionaea.capture" per server).</li>
+      <li><b style="color: red">-</b> Management of access control falls back to central admin (== Mark)</li>
+    </ul>
 	</div></section>
 
 	<section class="slide"><div>
 		<h2>So what would we need?</h2>
       <p>A system for large-scale real-time data-sharing would have to ...
       <ol>
-        <li>be real-time</li>
+        <li>be real-time (duh!)</li>
         <li>follow simple pub/sub principles</li>
         <li>allow for distributed and natural access control</li>
       </li>
@@ -159,11 +215,6 @@
 	</div></section>
 
 	<section class="slide"><div>
-		<h2>Use case: Manuscript</h2>
-    <p>TODO: Mark!
-	</div></section>
-
-	<section class="slide"><div>
 		<h2>hpfriends</h2>
     <p><i>hpfriends</i> is an evolution of the hpfeeds system. The wire-format
     is identical, the message broker behaves the same way. The big difference
@@ -175,19 +226,37 @@
     <p style="line-height: 1.3;"><i>hpfriends</i> supports users and groups. These are connected by
     sharing relations, representing a web of trust between users who trust each
     other by sharing their own data as well as data received by third parties.</p>
-    <img src="gfx/sharing.png" style="margin-left: auto; margin-right: auto; height: 50%">
-  </div></section>
-
-	<section class="slide"><div>
-		<h2>hpfriends - demo time!</h2>
-    <p style="line-height: 1.3;">Two scenarios: Direct sharing and sharing via third parties.</p>
-    <iframe src="http://map.honeycloud.net" style="width: 100%; height: 68%; margin-top: -30px;" scrolling="no"></iframe>
+    <embed src="gfx/sharing.svg" type="image/svg+xml" style="text-align: center; display: block; margin-left: auto; margin-right: auto; height: 50%"/>
   </div></section>
 
 	<section class="slide"><div>
 		<h2>hpfriends - social graph</h2>
     <img src="gfx/jojo_graph.png" style="float: right; display: inline; height: 50%">
     <p style="line-height: 1.3;"><i>hpfriends</i> operates on a social graph. Users and groups are represented by nodes in this graph, while sharing relations and group membership is denoted by edges between nodes. The channels being shared are specified as edge attributes.</p>
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - channels</h2>
+    <p style="line-height: 1.3;"><i>Channels</i> behave quite differently than in the original hpfeeds.</p>
+    <ul>
+      <li>I can publish on any channel-name I like</li>
+      <li>I can add sharing-relationships with groups or people</li>
+      <li>Each user can decided whether to accept the share I am offering</li>
+    </ul>
+    <img src="gfx/accept.png" style="display: inline; width: 100%">
+  </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - demo time!</h2>
+    <p style="line-height: 1.3;">We're going to show you ...</p>
+    <ol>
+      <li>A simple 1:1 data sharing scenario</li>
+      <li>A scenario where data is also relayed to a third party</li>
+      <li>The I can publish on any channel-name I like</li>
+      <li>I can add sharing-relationships with groups or people</li>
+      <li>Each user can decided whether to accept the share I am offering</li>
+    </ul>
+    <img src="gfx/accept.png" style="display: inline; width: 100%">
   </div></section>
 
 	<section class="slide"><div>
