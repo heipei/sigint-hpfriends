@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="shower/themes/ribbon/styles/screen.css">
 
 	<style>
+    @import url(http://fonts.googleapis.com/css?family=Inconsolata:400,700);
     body {
       /* prevent "flickering" between aliased/antialiased display */
       -webkit-backface-visibility: hidden;
@@ -65,6 +66,19 @@
     ul.bare li {
       margin-left: 50px;
     }
+    ul li ul li, small {
+      font-size: 80%;
+    }
+    tt {
+      font-family: "Inconsolata", sans-serif;
+    }
+    .center {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-top: -10px;
+    }
 	</style>
 </head>
 
@@ -73,7 +87,7 @@
 		<h1>hpfriends - real-time social data-sharing</h1>
 		<p></p>
 	</header>
-	<section class="slide cover" id="Cover"><div>
+	<section class="slide cover" id="Cover"><div style="margin-top: 50px;">
 		<h2>hpfriends - real-time social data-sharing</h2>
 		<p>SIGINT 2013 presentation by Mark <a href="https://twitter.com/repmovsb">'rep'</a> Schloesser and Johannes <a href="https://twitter.com/heipei">'heipei'</a> Gilger</p>
 		<img src="pictures/graph1.png" alt="">
@@ -158,12 +172,13 @@
 	<section class="slide"><div>
 		<h2>The hpfeeds protocol</h2>
     <p><i>hpfeeds</i> is an authenticated publish/subscribe datafeed protocol (by Mark) used by the <a
-    href="http://honeynet.org/">HoneyNet project</a>. It supports channels and authkeys.</p>
+    href="http://honeynet.org/">Honeynet Project</a>. It supports channels and authkeys.</p>
     <ul class="next">
       <li>Channel permissions on central webif connected to the broker</li>
       <li>Access Control via Authkeys, rather than users</li>
       <li>Simple wire-format, easy to implement and use</li>
-      <li>Implementations for hpfeeds exist for Python, Go, Ruby and JavaScript</li>
+      <li>Implementations for hpfeeds exist for Python, Go, Ruby and JavaScript
+      </li>
     </ul>
     <!--
    	<p class="next" style="text-align: center"><b>Only problem</b>: Management overhead for channel access control.</p>
@@ -173,9 +188,10 @@
 	<section class="slide"><div>
 		<h2>hpfeeds - details</h2>
     <ul class="next">
-      <li>Five protocol message types: <tt>PUB, SUB, ERROR, INFO, AUTH</tt></li>
+      <li>Five protocol message types: <tt> PUB, SUB, ERROR, INFO, AUTH</tt></li>
       <li>Central feedbroker on server, reference client utility</li>
       <li>Submission modules for Dionaea, Glastopf and Kippo</li>
+      <img src="gfx/hpfeeds.png" style="float: right; display: inline; height: 250px; margin-top: 10px">
       <li>Statistics sink</li>
       <li>Webinterface for managing ACLs</li>
     </ul>
@@ -191,7 +207,7 @@
     </ul>
     <h3 class="next">Cons</h3>
     <ul class="next bare">
-      <li><b style="color: red">-</b> Channels are global (one "dionaea.capture" per server).</li>
+      <li><b style="color: red">-</b> Channels are global (only one <tt>dionaea.capture</tt> channel)</li>
       <li><b style="color: red">-</b> Management of access control falls back to central admin (== Mark)</li>
     </ul>
 	</div></section>
@@ -231,8 +247,10 @@
 
 	<section class="slide"><div>
 		<h2>hpfriends - social graph</h2>
-    <img src="gfx/jojo_graph.png" style="float: right; display: inline; height: 50%">
-    <p style="line-height: 1.3;"><i>hpfriends</i> operates on a social graph. Users and groups are represented by nodes in this graph, while sharing relations and group membership is denoted by edges between nodes. The channels being shared are specified as edge attributes.</p>
+    <img src="gfx/jojo_graph.png" style="float: right; display: inline; height: 50%; margin-left: 10px;">
+    <p style="line-height: 1.3;"><i>hpfriends</i> operates on a social graph. Users and groups are nodes, sharing relations are edges.<br/><br/>
+    Edges between users have a <i>type</i> (<tt>shares, shares_all</tt>) and an <i>attribute</i>, i.e. the channel name.<br/><br/>
+    Group membership is also stored as an edge between a user and group.</p>
   </div></section>
 
 	<section class="slide"><div>
@@ -249,22 +267,22 @@
 	<section class="slide"><div>
 		<h2>hpfriends - demo time!</h2>
     <p style="line-height: 1.3;">We're going to show you ...</p>
+    <img type="image/svg+xml" src="gfx/terminal.svg" style="float: right; display: inline; height: 164px"/>
     <ol>
       <li>A simple 1:1 data sharing scenario</li>
       <li>A scenario where data is also relayed to a third party</li>
-      <li>The I can publish on any channel-name I like</li>
-      <li>I can add sharing-relationships with groups or people</li>
-      <li>Each user can decided whether to accept the share I am offering</li>
+      <li>The way the HoneyMap works behind the scenes</li>
     </ul>
-    <img src="gfx/accept.png" style="display: inline; width: 100%">
   </div></section>
 
 	<section class="slide"><div>
 		<h2>hpfriends - implementation</h2>
+    <img style="display: inline; float: left; height: 80px; margin-right: 10px; " src="gfx/neo4j.png">
     <p style="line-height: 1.3;">Currently, <i>hpfriends</i> uses the Neo4j graph database to store user, group and sharing information. Further information on users / etc is stored within MongoDB.</p>
-    <img src="gfx/graph_stats.png" style="margin-left: auto; margin-right: auto; margin-bottom: 50px; display: block; width: 100%">
+    <img src="gfx/graph_stats.png" style="margin-left: auto; margin-right: auto; margin-bottom: 10px; display: block; width: 100%">
+    <small class="center">Screenshot from Neo4j interface</small>
 
-    <p style="line-height: 1.3;">For actual message delivery via the feedbroker, sharing relationships are cached for 5-minute intervals for performance.</p>
+    <p style="line-height: 1.3; margin-top: 10px;">For actual message delivery via the feedbroker, sharing relationships are cached for 5-minute intervals for performance.</p>
   </div></section>
 
 	<section class="slide"><div>
@@ -273,10 +291,11 @@
     href="http://hpfriends.honeycloud.net">hpfriends.honeycloud.net</a>. The webif was built using Meteor, a real-time
     JavaScript / NodeJS web-framework which takes care of data persistence &amp; synchronization, data binding to the
     UI, templating, latency compensation and many other things.</p>
+    <embed src="gfx/html5.svg" type="image/svg+xml" style="text-align: right; display: inline; float: right; height: 30%"/>
     <ul>
       <li>CoffeeScript with Handlebars templating</li>
       <li>MongoDB and Neo4j queries in the background</li>
-      <li>Web 2.0 stuff: Twitter Bootstrap, Webfonts, Websockets, etc.</li>
+      <li>Web 2.0 stuff: Twitter Bootstrap, Webfonts, Websockets ...</li>
     </ul>
   </div></section>
 
@@ -292,16 +311,25 @@
 	<section class="slide"><div>
 		<h2>hpfriends - Software support</h2>
       <ul>
-        <li><b>dionaea</b> (server honeypot): branch which has hpfeeds integration</li>
+        <li><b><a href="http://dionaea.carnivore.it/">dionaea</a></b> (server honeypot): branch which has hpfeeds integration</li>
+        <img src="gfx/honeynet.png" style="float: right; display: inline; height: 50px; margin-top: 10px">
+        <li><b><a href="https://code.google.com/p/kippo/">kippo</a></b> (medium-interaction ssh honeypot): TODO</li>
+        <li><b><a href="http://buffer.github.io/thug/">thug</a></b> (low-interaction honeyclient): hpfeeds integrated</li>
       </ul>
   </div></section>
 
 	<section class="slide"><div>
 		<h2>hpfriends - links</h2>
     <ul>
-      <li><b>hpfriends</b> at <a href="http://hpfriends.honeycloud.net">hpfriends.honeycloud.net</a></li>
+      <li><b>hpfriends</b> at <a href="http://hpfriends.honeycloud.net">hpfriends.honeycloud.net</a>
+        <ul>
+          <li>Free to use, source not open (yet)</li>
+          <li>Consider contributing bug-reports / feature ideas!</li>
+        </ul>
+      </li>
       <li>Guide on how to use hpfriends at <a href="http://heipei.github.io/">heipei.github.io</a></li>
       <li><b>hpfeeds</b> repo and documentation at <a href="https://github.com/rep/hpfeeds">github.com/rep/hpfeeds</a></li>
+        <ul><li><small>Thanks to Florian Weingarten for Ruby / Go implementation</small></li></ul></li>
       <li>The <b>HoneyMap</b> at <a href="http://map.honeynet.org/">map.honeynet.org</a></li>
     </ul>
 	</div></section>
