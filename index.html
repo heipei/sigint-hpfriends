@@ -60,10 +60,10 @@
     p {
       margin-bottom: 0px;
     }
-    ul.bare li:before {
+    ol.bare li:before, ul.bare li:before {
       content: none;
     }
-    ul.bare li {
+    ol.bare li, ul.bare li {
       margin-left: 50px;
     }
     ul li ul li, small {
@@ -78,6 +78,10 @@
       margin-right: auto;
       display: block;
       margin-top: -10px;
+    }
+
+    ol.big li, ul.big li {
+      margin-bottom: 0px;
     }
 	</style>
 </head>
@@ -108,6 +112,7 @@
 		<h2>About us</h2>
       <div>
       <img style="display: inline; float: right; height: 150px" src="pictures/mark.png">
+      <img style="display: inline; float: right; height: 30px; margin-right: 10px;" src="gfx/rapid7.jpg">
       <h3>Mark 'rep' Schloesser</h3>
         <ul>
           <li>Malware researcher at Rapid7</li>
@@ -116,6 +121,7 @@
       </div>
       <div style="display: block">
       <img style="display: inline; float: right; height: 150px" src="pictures/jojo.jpg">
+      <img style="display: inline; float: right; height: 30px; margin-right: 10px;" src="gfx/rwth.png">
       <h3>Jojo 'heipei' Gilger</h3>
         <ul>
           <li>PhD student, IT-Security, RWTH Aachen University</li>
@@ -157,6 +163,7 @@
 	<section class="slide"><div>
 		<h2>Available options for sharing data</h2>
     <h3>The usual suspects...</h3>
+		<img src="gfx/cables.jpg" style="float: right; display: inline; height: 200px; margin-left: 10px">
 		<ul class="next">
       <li>Batch: FTP, E-Mail, scp, One-click hoster ...</li>
       <li>Real-time: XMPP, HTTP submission</li>
@@ -215,10 +222,10 @@
 	<section class="slide"><div>
 		<h2>So what would we need?</h2>
       <p>A system for large-scale real-time data-sharing would have to ...
-      <ol>
-        <li>be real-time (duh!)</li>
-        <li>follow simple pub/sub principles</li>
-        <li>allow for distributed and natural access control</li>
+      <ol class="big bare">
+        <li class="next"><img src="gfx/time.png" style="position: relative; top: 14px;"/> be real-time (duh!)</li>
+        <li class="next"><img src="gfx/pub.png" style="position: relative; top: 14px;"/> follow simple pub/sub principles</li>
+        <li class="next"><img src="gfx/access.png" style="position: relative; top: 14px;"/> allow for distributed and natural access control</li>
       </li>
 	</div></section>
 
@@ -259,7 +266,7 @@
     <ul>
       <li>I can publish on any channel-name I like</li>
       <li>I can add sharing-relationships with groups or people</li>
-      <li>Each user can decided whether to accept the share I am offering</li>
+      <li>Each user can decide whether to accept the share I am offering</li>
     </ul>
     <img src="gfx/accept.png" style="display: inline; width: 100%">
   </div></section>
@@ -268,7 +275,7 @@
 		<h2>hpfriends - demo time!</h2>
     <p style="line-height: 1.3;">We're going to show you ...</p>
     <img type="image/svg+xml" src="gfx/terminal.svg" style="float: right; display: inline; height: 164px"/>
-    <ol>
+    <ol class="big">
       <li>A simple 1:1 data sharing scenario</li>
       <li>A scenario where data is also relayed to a third party</li>
       <li>The way the HoneyMap works behind the scenes</li>
@@ -284,6 +291,17 @@
 
     <p style="line-height: 1.3; margin-top: 10px;">For actual message delivery via the feedbroker, sharing relationships are cached for 5-minute intervals for performance.</p>
   </div></section>
+
+	<section class="slide"><div>
+		<h2>hpfriends - Neo4j query</h2>
+    <pre><code style="font-size: 70%">
+start usrc=node({srcid}), udst=node({subids})
+        match p=usrc-[:*1..]->udst, udst-[ra:accepts]->umid
+        with relationships(p) as rs, udst as udst, ra as ra
+        where id(last(rs)) = ra.sid
+        return distinct udst'''
+</code></pre>
+    </div></section>
 
 	<section class="slide"><div>
 		<h2>hpfriends - frontend</h2>
@@ -305,17 +323,22 @@
   uint32_t <mark>messageLength</mark>; <mark class="comment">// total length</mark>
   uint8_t <mark>opCode</mark>; <mark class="comment">// currently five opCodes implemented</mark>
 };</code></pre>
-  <p>Full documentation and list of opCodes at <a href="https://github.com/rep/hpfeeds">github/rep/hpfeeds</a>.</p>
+    <pre><code style="font-size: 70%; line-height: 1.1">length | opcode | next | identifier | next | channelname | payload
+--------------------------------------------------------------------------
+    85        3   9      b4aa2@hp1    9      mwcapture     137941a3d8589f9
+    </pre></code>
+  <p class="center" style="margin-top: -25px">Full documentation and list of opCodes at <a href="https://github.com/rep/hpfeeds">github/rep/hpfeeds</a>.</p>
   </div></section>
 
 	<section class="slide"><div>
 		<h2>hpfriends - Software support</h2>
-      <ul>
+      <ul class="big">
         <li><b><a href="http://dionaea.carnivore.it/">dionaea</a></b> (server honeypot): branch which has hpfeeds integration</li>
         <img src="gfx/honeynet.png" style="float: right; display: inline; height: 50px; margin-top: 10px">
-        <li><b><a href="https://code.google.com/p/kippo/">kippo</a></b> (medium-interaction ssh honeypot): TODO</li>
+        <li><b><a href="https://code.google.com/p/kippo/">kippo</a></b> (medium-interaction ssh honeypot): rudimentary</li>
         <li><b><a href="http://buffer.github.io/thug/">thug</a></b> (low-interaction honeyclient): hpfeeds integrated</li>
       </ul>
+      <p class="center"><i>Your software as well?</i></p>
   </div></section>
 
 	<section class="slide"><div>
@@ -335,9 +358,12 @@
 	</div></section>
 
 	<section class="slide"><div>
-		<h2>The end</h2>
     <p style="text-align: center; font-size: 200%;">Thank you for listening!</p>
-    <p style="text-align: center;">Follow-up questions to <a href="mailto:ms@mwcollect.org">Mark</a> or <a href="mailto:heipei@hackvalue.de">Jojo</a>.</p>
+    <p style="text-align: center;">Follow-up questions to<br/> 
+    <a href="mailto:ms@mwcollect.org">Mark</a>  - <img src="gfx/twitter.png"/ style="height: 30px; position: relaitve; top: 15px; margin-top: 5px"> repmovsb<br/>
+    <a href="mailto:heipei@hackvalue.de">Jojo</a> - <img src="gfx/twitter.png"/ style="height: 30px; margin-top: 5px"> heipei<br/>
+    </p>
+    
 	</div></section>
 
 	<div class="progress"><div></div></div>
